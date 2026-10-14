@@ -2,13 +2,10 @@
 // Rename "test" to "base" so we can extend it with our own fixtures.
 const {test:base} =  require ('@playwright/test');
 
-// Import the HomePage class from the pages folder.
-// This class contains locators and methods related to the Home Page.
-const HomePage = require('../pages/homePage');
-// Import the LoginPage class from the pages folder.
-// This class contains locators and methods related to the Login Page.
+// Import the Page class from the pages folder.This class contains locators and methods related to that class
 const LoginPage = require('../pages/loginPage');
-
+const DashboardPage = require ('../pages/dashboardPage')
+const AdminPage = require('../pages/adminPage')
 
 // Create a new custom "test" object by extending Playwright's base test.
 // We are adding our own fixtures: loginPage and homePage.
@@ -28,10 +25,16 @@ const test = base.extend({
         await use(loginPage);
     },
 
-    // Create another custom fixture called "homePage".
-    homePage : async ({page},use) => {
-           const homePage  = new HomePage(page);
-           await use(homePage);
+    // Create another custom fixture called "dashboardPage".
+    dashboardPage : async ({page},use) => {
+           const dashboardPage  = new DashboardPage(page);
+           await use(dashboardPage);
+    },
+
+    // Create another custom fixture called "adminPage".
+    adminPage : async ({page},use) => {
+           const adminPage  = new AdminPage(page);
+           await use(adminPage);
     }
 
 });

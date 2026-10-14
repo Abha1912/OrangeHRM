@@ -1,0 +1,8 @@
+-------------------------------------------
+ Paywright Testcase Execution Started
+-------------------------------------------
+Open Application....
+Screenshot captured : TC001 Verify Search
+-------------------------------------------
+Playwright Testcase Execution Completed
+-------------------------------------------

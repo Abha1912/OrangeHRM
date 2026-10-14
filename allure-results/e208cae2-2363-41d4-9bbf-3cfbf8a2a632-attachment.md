@@ -1,0 +1,89 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: loginTest.spec.js >> TC003 Login User with empty username and password
+- Location: tests\loginTest.spec.js:48:1
+
+# Error details
+
+```
+Error: expect(locator).toHaveValue(expected) failed
+
+Locator: locator('.oxd-input-field-error-message')
+Expected: "Required"
+Error: strict mode violation: locator('.oxd-input-field-error-message') resolved to 2 elements:
+    1) <span data-v-7b563373="" data-v-957b4417="" class="oxd-text oxd-text--span oxd-input-field-error-message oxd-input-group__message">Required</span> aka getByText('Required').first()
+    2) <span data-v-7b563373="" data-v-957b4417="" class="oxd-text oxd-text--span oxd-input-field-error-message oxd-input-group__message">Required</span> aka getByText('Required').nth(1)
+
+Call log:
+  - Expect "toHaveValue" locator('.oxd-input-field-error-message') with timeout 5000ms
+  - waiting for locator('.oxd-input-field-error-message')
+
+```
+
+# Test source
+
+```ts
+  1  | const {expect} =  require ('@playwright/test');
+  2  | 
+  3  | // Import reusable common methods such as inputTextbox() and click().
+  4  | const CommonMethods = require('../utils/commonMethod.js');
+  5  | 
+  6  | // Page Object class for the Login Page.
+  7  | // This class contains Login Page locators and reusable actions/validations.
+  8  | class LoginPage{
+  9  | 
+  10 |     // Constructor receives the Playwright page object.
+  11 |     // The page object is used to interact with elements on the browser page.
+  12 |     constructor(page)
+  13 |     {
+  14 |          // Store the Playwright page object in "this.page" for use throughout this class.
+  15 |           this.page = page;
+  16 | 
+  17 |           // Login heading/text
+  18 |           this.txtLoginHeading = page.locator(".orangehrm-login-title");
+  19 |           this.requiredMessage = page.locator(".oxd-input-field-error-message");
+  20 |           this.errorMessage = page.locator(".oxd-alert-content-text");
+  21 | 
+  22 |           //inputFields
+  23 |           this.inputUsername = page.getByPlaceholder("Username");
+  24 |           this.inputPassword = page.getByPlaceholder("Password");
+  25 | 
+  26 |           // Navigation links/buttons
+  27 |           this.btnLogin = page.getByRole('button',{name:'Login'})
+  28 |     }
+  29 | 
+  30 |     // Verifies that the Login Page heading is visible.
+  31 |     async validateLoginHeading()
+  32 |     {
+  33 |         await expect(this.txtLoginHeading).toBeVisible();
+  34 |     }
+  35 | 
+  36 |     // Logs in using the provided email address and password.
+  37 |     async login(username,password)
+  38 |     {
+  39 |         await CommonMethods.inputTextbox(this.inputUsername,username);
+  40 |         await CommonMethods.inputTextbox(this.inputPassword,password);
+  41 |         await CommonMethods.click(this.btnLogin);
+  42 |     }
+  43 | 
+  44 |     async validationMessage()
+  45 |     {
+  46 |         await expect(this.errorMessage).toHaveText('Invalid credentials');
+  47 |     }
+  48 | 
+  49 |     async validateRequiredMessage()
+  50 |     {
+> 51 |          await expect(this.requiredMessage).toHaveValue('Required');
+     |                                             ^ Error: expect(locator).toHaveValue(expected) failed
+  52 |     }
+  53 | }
+  54 | 
+  55 | // Export the LoginPage class so it can be imported and used in test cases or Playwright fixtures.
+  56 | module.exports = LoginPage;
+```

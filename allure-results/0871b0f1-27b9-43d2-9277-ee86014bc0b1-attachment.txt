@@ -1,0 +1,8 @@
+-------------------------------------------
+ Paywright Testcase Execution Started
+-------------------------------------------
+Open Application....
+Screenshot captured : TC002 Verify left menu link redirect to coorect page
+-------------------------------------------
+Playwright Testcase Execution Completed
+-------------------------------------------

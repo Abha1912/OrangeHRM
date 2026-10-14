@@ -16,7 +16,6 @@ test.beforeAll(async ()  => {
 });
 
 // beforeEach() runs before EVERY individual test case { page }
-// The page comes from Playwright's built-in fixtures. page represents a browser tab/page.
 test.beforeEach (async ({page}) => {
       console.log ("Open Application....");
 

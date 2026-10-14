@@ -15,15 +15,16 @@ class LoginPage{
           this.page = page;
 
           // Login heading/text
-          this.txtLoginHeading = page.locator("//div[@class='login-form']//h2");
-          this.errorMessage = page.getByText('Your email or password is incorrect!');
+          this.txtLoginHeading = page.locator(".orangehrm-login-title");
+          this.requiredMessage = page.locator(".oxd-input-field-error-message");
+          this.errorMessage = page.locator(".oxd-alert-content-text");
 
           //inputFields
-          this.inputEmail = page.locator("[data-qa='login-email']");
-          this.inputPassword = page.locator("[data-qa='login-password']");
+          this.inputUsername = page.getByPlaceholder("Username");
+          this.inputPassword = page.getByPlaceholder("Password");
 
           // Navigation links/buttons
-          this.btnLogin = page.locator("[data-qa='login-button']");
+          this.btnLogin = page.getByRole('button',{name:'Login'})
     }
 
     // Verifies that the Login Page heading is visible.
@@ -33,18 +34,32 @@ class LoginPage{
     }
 
     // Logs in using the provided email address and password.
-    async login(email,password)
+    async login(username,password)
     {
-        await CommonMethods.inputTextbox(this.inputEmail,email);
+        await CommonMethods.inputTextbox(this.inputUsername,username);
         await CommonMethods.inputTextbox(this.inputPassword,password);
         await CommonMethods.click(this.btnLogin);
     }
 
     async validationMessage()
     {
-        await expect(this.errorMessage).toHaveText('Your email or password is incorrect!');
+        await expect(this.errorMessage).toHaveText('Invalid credentials');
     }
+
+    async validateRequiredMessage()
+    {
+        await expect(this.requiredMessage).toHaveCount(2);
+        await expect(this.requiredMessage.nth(0)).toHaveText('Required');
+        await expect(this.requiredMessage.nth(1)).toHaveText('Required');   
+     }
+
+     async passwordMasked()
+     {
+        await expect(this.inputPassword).toHaveAttribute('type','password');
+     }
 }
+
+       
 
 // Export the LoginPage class so it can be imported and used in test cases or Playwright fixtures.
 module.exports = LoginPage;

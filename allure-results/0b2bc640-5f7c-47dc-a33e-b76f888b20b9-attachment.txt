@@ -1,0 +1,8 @@
+-------------------------------------------
+ Paywright Testcase Execution Started
+-------------------------------------------
+Open Application....
+Screenshot captured : TC002 Login User with correct email and password
+-------------------------------------------
+Playwright Testcase Execution Completed
+-------------------------------------------

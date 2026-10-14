@@ -1,0 +1,8 @@
+-------------------------------------------
+ Paywright Testcase Execution Started
+-------------------------------------------
+Open Application....
+Screenshot captured : TC006 - Reset search
+-------------------------------------------
+Playwright Testcase Execution Completed
+-------------------------------------------

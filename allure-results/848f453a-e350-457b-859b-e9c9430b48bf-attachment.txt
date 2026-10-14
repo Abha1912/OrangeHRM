@@ -1,0 +1,8 @@
+-------------------------------------------
+ Paywright Testcase Execution Started
+-------------------------------------------
+Open Application....
+Screenshot captured : TC006 Validate that password is masked
+-------------------------------------------
+Playwright Testcase Execution Completed
+-------------------------------------------

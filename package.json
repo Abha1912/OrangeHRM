@@ -11,5 +11,8 @@
     "@types/node": "^26.6.2",
     "allure-commandline": "^2.46.1",
     "allure-playwright": "^3.13.0"
+  },
+  "dependencies": {
+    "playwright": "^1.63.0"
   }
 }

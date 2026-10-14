@@ -10,60 +10,114 @@ require('../hooks/hooks.js');
 
 // Define the test case.
 // "homePage" and "loginPage" are custom fixtures provided by baseFixture.js.
-test('TC002 Login User with correct email and password',async({homePage,loginPage})=>{
+test('TC001 Login User with correct username and password',async({loginPage,dashboardPage})=>{
 
     // Read login credentials from the JSON test data file.
     // The login() method returns the login test data.
     const loginData = JsonReader.login();
 
-    // Validate that the Home Page title is correct.
-    await homePage.validatePageTitle();
-
-    // Click the "Signup / Login" link to open the Login Page.
-    await homePage.openLoginPage();
-
     // Verify that the Login Page heading is visible.
     await loginPage.validateLoginHeading();
 
-    // Login using the valid email and password retrieved from the JSON test data.
+    // Login using the valid username and password retrieved from the JSON test data.
         await loginPage.login(
-        loginData.validUser.email,
+        loginData.validUser.username,
         loginData.validUser.password
     );
-
-
-    await homePage.validateUserIsLoggedIn();
-
-    //await homePage.deleteAccount();
-    //await homePage.validateAccountDeletedMessage();
+    await dashboardPage.navigateDashboardPage();
 
 });
 
-
-
-test('TC003 Login User with incorrect email and password',async({homePage,loginPage})=>{
+test('TC002 Login User with invalid username and password',async({loginPage})=>{
 
     // Read login credentials from the JSON test data file.
     // The login() method returns the login test data.
     const loginData = JsonReader.login();
 
-    // Validate that the Home Page title is correct.
-    await homePage.validatePageTitle();
+    // Verify that the Login Page heading is visible.
+    await loginPage.validateLoginHeading();
 
-    // Click the "Signup / Login" link to open the Login Page.
-    await homePage.openLoginPage();
+    // Login using the valid username and password retrieved from the JSON test data.
+        await loginPage.login(
+        loginData.invalidUser.username,
+        loginData.invalidUser.password
+    );
+
+    await loginPage.validationMessage();
+});
+
+test('TC003 Login User with empty username and password',async({loginPage})=>{
+
+    // Read login credentials from the JSON test data file.
+    // The login() method returns the login test data.
+    const loginData = JsonReader.login();
 
     // Verify that the Login Page heading is visible.
     await loginPage.validateLoginHeading();
 
-    // Login using the valid email and password retrieved from the JSON test data.
+    // Login using the empty user and password retrieved from the JSON test data.
         await loginPage.login(
-        loginData.inValidUser.email,
-        loginData.inValidUser.password
+        loginData.emptyUser.username,
+        loginData.emptyUser.password
     );
 
+    await loginPage.validateRequiredMessage();
+});
 
-    await loginPage.validationMessage();
 
+test('TC004 Login User with sqlInjection username and password',async({loginPage})=>{
+
+    // Read login credentials from the JSON test data file.
+    // The login() method returns the login test data.
+    const loginData = JsonReader.login();
+
+    // Verify that the Login Page heading is visible.
+    await loginPage.validateLoginHeading();
+
+    // Login using the sqlInjection user and password retrieved from the JSON test data.
+        await loginPage.login(
+        loginData.sqlInjectionUser.username,
+        loginData.sqlInjectionUser.password
+    );
+
+        await loginPage.validationMessage();
+
+});
+
+test('TC005 Login User with specialCharacterUser username and password',async({loginPage})=>{
+
+    // Read login credentials from the JSON test data file.
+    // The login() method returns the login test data.
+    const loginData = JsonReader.login();
+
+    // Verify that the Login Page heading is visible.
+    await loginPage.validateLoginHeading();
+
+    // Login using the specialCharacter user and password retrieved from the JSON test data.
+        await loginPage.login(
+        loginData.specialCharacterUser.username,
+        loginData.specialCharacterUser.password
+    );
+
+        await loginPage.validationMessage();
+
+});
+
+test('TC006 Validate that password is masked',async({loginPage})=>{
+
+    // Read login credentials from the JSON test data file.
+    // The login() method returns the login test data.
+    const loginData = JsonReader.login();
+
+    // Verify that the Login Page heading is visible.
+    await loginPage.validateLoginHeading();
+
+    // Login using the valid user and password retrieved from the JSON test data.
+        await loginPage.login(
+        loginData.validUser.username,
+        loginData.validUser.password
+    );
+    
+        await loginPage.passwordMasked();
 
 });

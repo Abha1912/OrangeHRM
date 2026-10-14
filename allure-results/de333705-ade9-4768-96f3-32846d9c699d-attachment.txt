@@ -1,0 +1,10 @@
+-------------------------------------------
+ Paywright Testcase Execution Started
+-------------------------------------------
+Open Application....
+Leave
+Leave
+undefined
+-------------------------------------------
+Playwright Testcase Execution Completed
+-------------------------------------------
