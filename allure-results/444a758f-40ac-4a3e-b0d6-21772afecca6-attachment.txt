@@ -1,0 +1,8 @@
+-------------------------------------------
+ Paywright Testcase Execution Started
+-------------------------------------------
+Open Application....
+Screenshot captured : TC003 - Search by user role
+-------------------------------------------
+Playwright Testcase Execution Completed
+-------------------------------------------

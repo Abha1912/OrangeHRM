@@ -3,11 +3,9 @@ const {expect} =  require('@playwright/test');
 const CommonMethods = require('../utils/commonMethod.js');
 
 
-class DashboardPage{
+class DashboardPage {
     
-   
-    constructor(page)
-    {
+    constructor(page) {
          
         this.page = page; 
 
@@ -16,98 +14,79 @@ class DashboardPage{
         this.inputSearch = page.getByPlaceholder('Search');
         this.listMenu = page.locator('.oxd-main-menu-item');
 
-        this.linkAdmin = page.locator('//a[@class="oxd-main-menu-item"]//span[text()="Admin"]');
-        this.linkPIM = page.locator('//a[@class="oxd-main-menu-item"]//span[text()="PIM"]');
-        this.linkLeave = page.locator('//a[@class="oxd-main-menu-item"]//span[text()="Leave"]');
-        this.linkTime= page.locator('//a[@class="oxd-main-menu-item"]//span[text()="Time"]');
-        this.linkRecruitment = page.locator('//a[@class="oxd-main-menu-item"]//span[text()="Recruitment"]');
-        this.linkPerformance = page.locator('//a[@class="oxd-main-menu-item"]//span[text()="Performance"]');
-        this.linkDashboard = page.locator('//a[@class="oxd-main-menu-item"]//span[text()="Dashboard"]');
-        this.linkDirectory = page.locator('//a[@class="oxd-main-menu-item"]//span[text()="Directory"]');
-        this.linkMaintenance = page.locator('//a[@class="oxd-main-menu-item"]//span[text()="Maintenance"]');
-        this.linkClaim = page.locator('//a[@class="oxd-main-menu-item"]//span[text()="Claim"]');
-        this.linkBuzz = page.locator('//a[@class="oxd-main-menu-item"]//span[text()="Buzz"]');
+        this.linkAdmin = page.getByRole('link', { name: 'Admin' });
+        this.linkPIM = page.getByRole('link', { name: 'PIM' });
+        this.linkLeave = page.getByRole('link', { name: 'Leave' });
+        this.linkTime = page.getByRole('link', { name: 'Time' });
+        this.linkRecruitment = page.getByRole('link', { name: 'Recruitment' });
+        this.linkPerformance = page.getByRole('link', { name: 'Performance' });
+        this.linkDashboard = page.getByRole('link', { name: 'Dashboard' });
+        this.linkDirectory = page.getByRole('link', { name: 'Directory' });
+        this.linkClaim = page.getByRole('link', { name: 'Claim' });
+        this.linkBuzz = page.getByRole('link', { name: 'Buzz' });
         this.linkMyInfo = page.getByRole('link',{name:'My Info'});
 
     }
+    
 
-    async navigateDashboardPage()
-    {
-        await expect(this.page).toHaveURL(/\/dashboard\/index/);
+    async navigateAndVerify(locator, urlPattern) {
+
+        await expect(locator).toBeVisible();
+        // await locator.click();
+        // await expect(this.page).toHaveURL(urlPattern);
+        await Promise.all([this.page.waitForURL(urlPattern),locator.click()]);
+        await expect(this.page).toHaveURL(urlPattern);
+
+
     }
 
-    async search(searchText)
-    {
+    
+    async navigateToDashboardpage() {
+
+        await expect(this.page).toHaveURL(/\/dashboard\/index/);
+        
+    }
+
+
+    async navigateToAdminpage() {
+
+        await this.navigateAndVerify(this.linkAdmin,/\/admin\/viewSystemUsers/);
+
+    }
+ 
+    async validateMenuNavigation() {
+        
+        await this.navigateAndVerify(this.linkAdmin,/\/admin\/viewSystemUsers/);
+
+        await this.navigateAndVerify(this.linkPIM,/\/pim\/viewEmployee/);
+
+        await this.navigateAndVerify(this.linkLeave,/\/leave\/viewLeaveList/);
+
+        await this.navigateAndVerify(this.linkTime,/\/time\/viewEmployeeTimesheet/);
+
+        await this.navigateAndVerify(this.linkPerformance,/\/performance\/searchEvaluatePerformanceReview/);
+
+        await this.navigateAndVerify(this.linkDashboard,/\/dashboard\/index/);
+
+        await this.navigateAndVerify(this.linkDirectory,/\/directory\/viewDirectory/);
+
+        await this.navigateAndVerify(this.linkClaim,/\/claim\/viewAssignClaim/);
+
+        await this.navigateAndVerify(this.linkBuzz,/\/buzz\/viewBuzz/);
+
+        await this.navigateAndVerify(this.linkRecruitment,/\/recruitment\/viewCandidates/);
+        
+    }
+
+    async search(searchText) {
+
         await CommonMethods.inputTextbox(this.inputSearch,searchText);
         const matchingMenu = this.page.locator('.oxd-main-menu-item').filter({ hasText: searchText });
         await expect(matchingMenu).toBeVisible();
         await expect(matchingMenu).toContainText(searchText);
 
-        //await expect(this.listMenu).toHaveText(searchText);
-    }
-
-    async navigateToAdmin(){
-        await CommonMethods.click(this.linkAdmin);
-        await expect(this.page).toHaveURL(/\/admin\/viewSystemUsers/);
-    }
-
-    async validateMenuNavigation()
-    {
-        await CommonMethods.click(this.linkAdmin);
-        await expect(this.page).toHaveURL(/\/admin\/viewSystemUsers/);
-
-        await this.page.waitForTimeout(2000); 
-
-        await CommonMethods.click(this.linkPIM);
-        await expect(this.page).toHaveURL(/\/pim\/viewEmployee/);
-
-        await this.page.waitForTimeout(2000); 
-
-        await CommonMethods.click(this.linkLeave);
-        await expect(this.page).toHaveURL(/\/leave\/viewLeaveList/);
-
-        await this.page.waitForTimeout(2000); 
-
-        await CommonMethods.click(this.linkTime);
-        await expect(this.page).toHaveURL(/\/time\/viewEmployeeTimesheet/);
-
-        await this.page.waitForTimeout(2000); 
-
-        await CommonMethods.click(this.linkPerformance);
-        await expect(this.page).toHaveURL(/\/performance\/searchEvaluatePerformanceReview/);
-
-        await this.page.waitForTimeout(2000); 
-
-        await CommonMethods.click(this.linkDashboard);
-        await expect(this.page).toHaveURL(/\/dashboard\/index/);
-
-        await this.page.waitForTimeout(2000); 
-
-        await CommonMethods.click(this.linkDirectory);
-        await expect(this.page).toHaveURL(/\/directory\/viewDirectory/);
-
-        await this.page.waitForTimeout(2000); 
-
-        await CommonMethods.click(this.linkClaim);
-        await expect(this.page).toHaveURL(/\/claim\/viewAssignClaim/);
-
-        await this.page.waitForTimeout(5000); 
-
-        await CommonMethods.click(this.linkBuzz);
-        await expect(this.page).toHaveURL(/\/buzz\/viewBuzz/);
-
-        await this.page.waitForTimeout(2000); 
-
-        await CommonMethods.click(this.linkRecruitment);
-        await expect(this.page).toHaveURL(/\/recruitment\/viewCandidates/);
-
-        await this.page.waitForTimeout(2000); 
-
-        // await CommonMethods.click(this.linkMaintenance);
-        // await expect(this.page).toHaveURL(/\/maintenance\/viewMaintenance/);
     }
     
 }
 
-// Export the DashboardPage class.Other files can import and create a HomePage object.
 module.exports = DashboardPage;

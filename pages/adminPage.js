@@ -4,10 +4,10 @@ const CommonMethods = require('../utils/commonMethod.js');
 class AdminPage {
 
     constructor(page) {
+
         this.page = page;
 
         this.txtSystemUsers = page.getByRole('heading', {name: 'System Users'});
-
         this.inputUsername = page.locator('.oxd-form').first().getByRole('textbox').nth(0);
         this.dropdownUserRole = page.locator('.oxd-select-text').nth(0);
         this.dropdownStatus = page.locator('.oxd-select-text').nth(1);
@@ -16,10 +16,12 @@ class AdminPage {
         this.btnReset = page.getByRole('button', { name: 'Reset' });
         this.btnAdd = page.getByRole('button', { name: 'Add' });
         this.tableUsers = page.getByRole('table');
-        this.txtNoRecords = page.getByText('No Records Found');
+        this.txtNoRecords = page.getByRole('table').getByText('No Records Found', { exact: true });
+
+        
     }
 
-        // Verify System Users page
+    // Verify System Users page
     async verifySystemUsersPage() {
         await expect(this.page).toHaveURL(/\/admin\/viewSystemUsers/);
         await expect(this.txtSystemUsers).toBeVisible();
@@ -39,24 +41,14 @@ class AdminPage {
     // Select user role
     async selectUserRole(role) {
         await CommonMethods.click(this.dropdownUserRole);
-
-        const roleOption = this.page.getByRole('option', {
-            name: role,
-            exact: true
-        });
-
+        const roleOption = this.page.getByRole('option', { name: role});
         await CommonMethods.click(roleOption);
     }
 
     // Select status
     async selectStatus(status) {
         await CommonMethods.click(this.dropdownStatus);
-
-        const statusOption = this.page.getByRole('option', {
-            name: status,
-            exact: true
-        });
-
+        const statusOption = this.page.getByRole('option', {name: status});
         await CommonMethods.click(statusOption);
     }
 
@@ -78,11 +70,7 @@ class AdminPage {
     // Verify username in results
     async verifyUsername(username) {
         await expect(
-            this.tableUsers.getByRole('cell', {
-                name: username,
-                exact: true
-            }).first()
-        ).toBeVisible();
+            this.tableUsers.getByRole('cell', {name: username}).first()).toBeVisible();
     }
 
     // Verify no records found
@@ -117,12 +105,7 @@ class AdminPage {
 
     // Verify Add User page
     async verifyAddUserPage() {
-        await expect(
-            this.page.getByRole('heading', {
-                name: 'Add User',
-                exact: true
-            })
-        ).toBeVisible();
+        await expect(this.page.getByRole('heading', {name: 'Add User'})).toBeVisible();
     }
 
     // Verify username field is empty

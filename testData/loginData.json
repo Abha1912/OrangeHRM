@@ -1,12 +1,36 @@
 {
     "validUser" : {
-        "email" :  "anjal.shah+dst@gmail.com",
-        "password" : "Test@123"
+        "username" :  "Admin",
+        "password" : "admin123"
     },
 
-    "inValidUser" : {
-        "email" :  "anjal+123@gmail.com",
-        "password" : "Test@12345"
+    "invalidUser" : {
+        "username" :  "Admin1",
+        "password" : "admin12345"
+    },
+  
+    "emptyUser" : {
+        "username" : "",
+        "password" : ""
+    },
+
+    "sqlInjectionUser": {
+        "username": "' OR '1'='1",
+        "password": "Admin123"
+
+    },
+
+    "specialCharacterUser":{           
+        "username": "Ad'min",
+        "password": "Admin123"
+
+    },
+
+    "maskedPasssword":{           
+        "username": "Admin",
+        "password": "Admin123"
+
     }
+
 }
 

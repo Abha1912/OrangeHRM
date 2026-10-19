@@ -1,45 +1,41 @@
-// Import the "test" object from Playwright.
-// Rename "test" to "base" so we can extend it with our own fixtures.
-const {test:base} =  require ('@playwright/test');
 
-// Import the Page class from the pages folder.This class contains locators and methods related to that class
+const {test:base,expect} =  require ('@playwright/test');
+
 const LoginPage = require('../pages/loginPage');
 const DashboardPage = require ('../pages/dashboardPage')
 const AdminPage = require('../pages/adminPage')
+const JsonReader = require('../utils/jsonReader.js');
 
-// Create a new custom "test" object by extending Playwright's base test.
-// We are adding our own fixtures: loginPage and homePage.
 const test = base.extend({
     
-    // Create a custom fixture called "loginPage".
-    // page = Playwright's built-in page fixture.
-    // use = function used to provide the created LoginPage object to the test case.
-
     loginPage: async ({page},use)=>{
-          
-        // Create an object of the LoginPage class.
-        // Pass Playwright's page object to the LoginPage constructor.
-        const loginPage = new LoginPage(page);
-         
-        // Make the loginPage object available to the test.
-        await use(loginPage);
+
+        await use(new LoginPage(page));
+
+        // const loginPage = new LoginPage(page);
+        // await use(loginPage);
     },
 
-    // Create another custom fixture called "dashboardPage".
     dashboardPage : async ({page},use) => {
-           const dashboardPage  = new DashboardPage(page);
-           await use(dashboardPage);
+        //    const dashboardPage  = new DashboardPage(page);
+        //    await use(dashboardPage);
+        await use(new DashboardPage(page));
+
     },
 
-    // Create another custom fixture called "adminPage".
     adminPage : async ({page},use) => {
-           const adminPage  = new AdminPage(page);
-           await use(adminPage);
-    }
+        //    const adminPage  = new AdminPage(page);
+        //    await use(adminPage);
+        await use(new AdminPage(page));
 
+    },
+
+    authenticatedPage: async ({ page, loginPage }, use) => {
+        const loginData = JsonReader.login();
+        await loginPage.login(loginData.validUser.username,loginData.validUser.password);
+        await expect(page).toHaveURL(/\/dashboard\/index/);
+        await use(page);
+    }
 });
 
-
-// Export our customized "test" object.
-// Other test files can import this "test" and use loginPage and homePage as fixtures.
-module.exports = { test };
+module.exports = { test,expect};
